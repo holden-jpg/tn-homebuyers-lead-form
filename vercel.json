@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/get-offer/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "functions": {
     "api/*.js": {
       "memory": 512,
