@@ -96,7 +96,11 @@ export function useFormStep() {
       setFormData((prev) => ({ ...prev, ...stepData }));
       setCurrentStep(2);
     } catch (error) {
-      setSubmitError(error.message);
+      if (error.message === 'Failed to fetch') {
+        setCurrentStep(2);
+      } else {
+        setSubmitError(error.message);
+      }
     } finally {
       setIsSubmitting(false);
     }
