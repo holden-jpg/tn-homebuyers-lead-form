@@ -1,0 +1,31 @@
+import { createSalesforceLead, updateSalesforceLead } from './_salesforce.js';
+
+export default async function handler(req, res) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Preflight
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  try {
+    if (req.method === 'POST') {
+      const result = await createSalesforceLead(req.body);
+      return res.json({ success: true, leadId: result.id });
+    }
+
+    if (req.method === 'PATCH') {
+      const { step, ...formData } = req.body;
+      // Extract leadId from the URL — /api/leads/LEADID
+      const leadId = req.query.leadId;
+      const result = await updateSalesforceLead(leadId, formData, step);
+      return res.json({ success: true, leadId: result.id });
+    }
+
+    return res.status(405).json({ error: 'Method not allowed' });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+}
