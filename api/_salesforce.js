@@ -55,11 +55,13 @@ function mapToSalesforceFields(formData, step) {
       LastName: (fullNameArray.length > 1 ? fullNameArray.slice(1).join(' ') : fullNameArray[0]),
       Email: formData.email,
       Phone: formData.phone,
-      UTM_Campaign__c: formData.utmCampaign || ''
-      /*UTM_Source__c: formData.utmSource   || '',
-      UTM_Medium__c: formData.utmMedium   || '',
-      UTM_Term__c: formData.utmTerm     || '',
-      UTM_Content__c: formData.utmContent  || ''*/
+      LeadSource: formData.utmSource || '',
+      UTM_Campaign__c: formData.utmCampaign || '',
+      UTM_Term__c: formData.utmTerm || '',
+      UTM_Ad_Group__c: formData.utmAdGroup || '',
+      Campaign_ID__c: formData.utmId || '',
+      Lead_Source_URL__c: formData.sourceUrl || '',
+      IP_Address__c: formData.ipAddress || ''
     });
   }
 
@@ -77,7 +79,6 @@ function mapToSalesforceFields(formData, step) {
   if (step === 3 || step === 'all') {
     Object.assign(fields, {
       Desired_Closing_Time_Frame__c: formData.timeToSell,
-      LeadSource: formData.howDidYouHear,
       Sellers_Reason_for_Selling__c: formData.additionalNotes || '',
     });
   }
