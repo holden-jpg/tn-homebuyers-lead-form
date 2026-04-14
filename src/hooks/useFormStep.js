@@ -6,12 +6,13 @@ import {
   step3Defaults,
 } from '../schemas/formSchemas';
 
-const STEP_URLS = {
-  1: '/get-offer/step-1',
-  2: '/get-offer/step-2',
-  3: '/get-offer/step-3',
-  complete: '/get-offer/complete',
-};
+function buildStepUrl(step, preserveExisting = false) {
+  const params = preserveExisting
+    ? new URLSearchParams(window.location.search)
+    : new URLSearchParams();
+  params.set('step', step);
+  return `${window.location.pathname}?${params.toString()}`;
+}
 
 const TOTAL_STEPS = 3;
 const API_URL = import.meta.env.VITE_API_URL || '';
@@ -31,17 +32,15 @@ export function useFormStep() {
   });
 
   // ─── Sync URL on step change ────────────────────────────────────────────
-  // ─── Sync URL on step change ────────────────────────────────────────────
   useEffect(() => {
     if (isComplete) {
-      window.history.pushState({ step: 'complete' }, '', STEP_URLS.complete);
+      window.history.pushState({ step: 'complete' }, '', buildStepUrl('complete'));
       return;
     }
 
-    // On step 1, preserve any existing query params (UTMs etc.)
+    // On step 1, preserve any existing query params (UTMs etc.) alongside step
     // On subsequent steps they've already been captured so we can drop them
-    const search = currentStep === 1 ? window.location.search : '';
-    const url = `${STEP_URLS[currentStep]}${search}`;
+    const url = buildStepUrl(currentStep, currentStep === 1);
     window.history.pushState({ step: currentStep }, '', url);
   }, [currentStep, isComplete]);
 

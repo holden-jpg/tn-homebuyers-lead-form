@@ -22,7 +22,7 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
   };
 
   return (
-    <div className="form-step">
+    <>
       <h2 className="form-step-title">Let's start with your details</h2>
       <p className="form-step-subtitle">
         We'll use this to send you your cash offer.
@@ -86,6 +86,6 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
           {isSubmitting ? 'Saving...' : 'Next Step →'}
         </button>
       </form>
-    </div>
+    </>
   );
 }

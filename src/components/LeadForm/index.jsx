@@ -26,18 +26,19 @@ export function LeadForm() {
 
   return (
     <div className="form-wrapper">
-      <ProgressBar
-        currentStep={currentStep}
-        totalSteps={totalSteps}
-        progressPercent={progressPercent}
-      />
+      <div className="form-step">
+        <ProgressBar
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+          progressPercent={progressPercent}
+        />
 
-      {/* Global submission error */}
-      {submitError && (
-        <div className="form-error-banner">
-          {submitError}
-        </div>
-      )}
+        {/* Global submission error */}
+        {submitError && (
+          <div className="form-error-banner">
+            {submitError}
+          </div>
+        )}
 
       {currentStep === 1 && (
         <Step1
@@ -64,6 +65,7 @@ export function LeadForm() {
           isSubmitting={isSubmitting}
         />
       )}
+      </div>
     </div>
   );
 }

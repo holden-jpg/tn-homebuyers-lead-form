@@ -35,7 +35,7 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
   });
 
   return (
-    <div className="form-step">
+    <>
       <h2 className="form-step-title">Almost done!</h2>
       <p className="form-step-subtitle">
         Just a couple more questions to help us prepare your offer.
@@ -112,6 +112,6 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 }

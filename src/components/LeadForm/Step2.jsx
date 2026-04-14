@@ -42,7 +42,7 @@ export function Step2({
   });
 
   return (
-    <div className="form-step">
+    <>
       <h2 className="form-step-title">Tell us about the property</h2>
       <p className="form-step-subtitle">
         The more you share, the faster we can prepare your offer.
@@ -134,6 +134,6 @@ export function Step2({
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 }
