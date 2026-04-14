@@ -12,18 +12,6 @@ const TIME_TO_SELL_OPTIONS = [
   { label: 'Just Exploring', value: 'Not in a Rush' },
 ];
 
-// Get the final list from Tennessee team per the spec
-const HOW_DID_YOU_HEAR_OPTIONS = [
-  { label: 'TV', value: 'TV' },
-  { label: 'Family or Friend', value: 'Referral' },
-  { label: 'Google', value: 'SEO / Google General Search' },
-  { label: 'YouTube', value: 'YouTube' },
-  { label: 'Facebook', value: 'Facebook' },
-  { label: 'Previous Seller', value: 'Previous Seller' },
-  { label: 'Radio', value: 'Radio' },
-  { label: 'Other', value: 'Other (LAST RESORT) - put details in notes' },
-];
-
 export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
   const {
     register,
@@ -63,20 +51,7 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
           )}
         </div>
 
-        {/* How did you hear */}
-        <div className="form-field">
-          <label htmlFor="howDidYouHear">How did you hear about us?</label>
-          <select id="howDidYouHear" {...register('howDidYouHear')}>
-            <option value="">Select...</option>
-            {HOW_DID_YOU_HEAR_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Additional notes */}
+{/* Additional notes */}
         <div className="form-field">
           <label htmlFor="additionalNotes">
             Anything else you'd like us to know?
