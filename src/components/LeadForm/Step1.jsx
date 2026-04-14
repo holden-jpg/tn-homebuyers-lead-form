@@ -47,7 +47,7 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
 
         {/* Email */}
         <div className="form-field">
-          <label htmlFor="email">Email Address *</label>
+          <label htmlFor="email">Email Address</label>
           <input
             id="email"
             type="email"

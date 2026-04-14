@@ -12,8 +12,9 @@ export const step1Schema = z.object({
 
   email: z
     .string()
-    .min(1, 'Email is required')
-    .email('Please enter a valid email address'),
+    .email('Please enter a valid email address')
+    .optional()
+    .or(z.literal('')),
 
   phone: z
     .string()

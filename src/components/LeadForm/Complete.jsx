@@ -9,14 +9,6 @@ export function Complete({ leadId }) {
         your cash offer.
       </p>
 
-      <div className="next-steps">
-        <h3>What happens next?</h3>
-        <ol>
-          <li>Our team reviews your property details</li>
-          <li>We prepare a fair cash offer within 24 hours</li>
-          <li>You choose whether to accept — no obligation</li>
-        </ol>
-      </div>
     </div>
   );
 }
