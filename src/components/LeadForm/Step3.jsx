@@ -43,21 +43,21 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
 
-        {/* Time to sell — radio buttons per mobile-first spec */}
+        {/* Time to sell */}
         <div className="form-field">
-          <label>How soon are you looking to sell? *</label>
-          <div className="radio-group">
+          <label htmlFor="timeToSell">How soon are you looking to sell? *</label>
+          <select
+            id="timeToSell"
+            {...register('timeToSell')}
+            className={errors.timeToSell ? 'input-error' : ''}
+          >
+            <option value="">Select...</option>
             {TIME_TO_SELL_OPTIONS.map((option) => (
-              <label key={option.value} className="radio-option">
-                <input
-                  type="radio"
-                  value={option.value}
-                  {...register('timeToSell')}
-                />
-                <span>{option.label}</span>
-              </label>
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
             ))}
-          </div>
+          </select>
           {errors.timeToSell && (
             <span className="field-error">{errors.timeToSell.message}</span>
           )}
