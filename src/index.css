@@ -69,7 +69,7 @@ main {
 
 /* ─── Progress Bar ──────────────────────────────────────────────────────── */
 .progress-container {
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 }
 
 .progress-steps {
