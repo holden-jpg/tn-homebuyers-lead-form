@@ -9,7 +9,6 @@ const CAPTURED_UTMS = (() => {
     utmContent: params.get('utm_content') || '',
     utmId: params.get('utm_id') || '',
     utmAdGroup: params.get('utm_adgroup') || '',
-    sourceUrl: window.location.href,
   };
 })();
 

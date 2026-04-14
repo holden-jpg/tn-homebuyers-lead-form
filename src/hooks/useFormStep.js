@@ -80,7 +80,7 @@ export function useFormStep() {
         const response = await fetch(`${API_URL}/api/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...stepData, ...utmParams }),
+          body: JSON.stringify({ ...stepData, ...utmParams, sourceUrl: window.location.href }),
         });
 
         const data = await response.json();
