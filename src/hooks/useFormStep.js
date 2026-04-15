@@ -31,10 +31,20 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   const [isComplete, setIsComplete] = useState(false);
   const [leadId, setLeadId] = useState(initialLeadId);
 
+  const storedStep1 = (() => {
+    try {
+      const stored = sessionStorage.getItem('thb_step1');
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  })();
+
   const [formData, setFormData] = useState({
     ...step1Defaults,
     ...step2Defaults,
     ...step3Defaults,
+    ...storedStep1,
   });
 
   // ─── Sync URL on step change (full form only) ───────────────────────────
@@ -105,6 +115,7 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
       setFormData((prev) => ({ ...prev, ...stepData }));
 
       if (variant === 'short') {
+        sessionStorage.setItem('thb_step1', JSON.stringify(stepData));
         window.location.href = `${fullFormUrl}?step=2&leadId=${id}`;
         return;
       }
