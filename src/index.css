@@ -536,20 +536,24 @@ main {
 }
 
 .form-wrapper--short .form-step {
-  padding: 28px 32px;
+  padding: 20px 24px;
+}
+
+.form-wrapper--short .form-field {
+  margin-bottom: 0;
 }
 
 .short-form-fields {
   display: grid;
   grid-template-columns: 1fr 1fr auto;
   gap: 12px;
-  align-items: start;
+  align-items: end;
 }
 
 .short-form-btn {
   width: auto;
   white-space: nowrap;
-  margin-top: 29px;
+  margin-top: 0;
 }
 
 @media (max-width: 700px) {
