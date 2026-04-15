@@ -58,8 +58,11 @@ function mapToSalesforceFields(formData, step) {
       LeadSource: formData.utmSource || '',
       UTM_Campaign__c: formData.utmCampaign || '',
       UTM_Term__c: formData.utmTerm || '',
+      UTM_Content__c: formData.utmContent || '',
       UTM_Ad_Group__c: formData.utmAdGroup || '',
       Campaign_ID__c: formData.utmId || '',
+      GCLID__c: formData.gclid || '',
+      FBCLID__c: formData.fbclid || '',
       Lead_Source_URL__c: formData.sourceUrl || '',
       IP_Address__c: formData.ipAddress || ''
     });

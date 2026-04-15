@@ -1,9 +1,9 @@
 import { LeadForm } from './components/LeadForm'
 
-function App() {
+function App({ variant, fullFormUrl }) {
   return (
     <main>
-      <LeadForm />
+      <LeadForm variant={variant} fullFormUrl={fullFormUrl} />
     </main>
   )
 }

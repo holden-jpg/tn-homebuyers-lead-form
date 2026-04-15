@@ -17,13 +17,19 @@ function buildStepUrl(step, preserveExisting = false) {
 const TOTAL_STEPS = 3;
 const API_URL = import.meta.env.VITE_API_URL || '';
 
-export function useFormStep() {
+export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   const utmParams = useUtmParams();
-  const [currentStep, setCurrentStep] = useState(1);
+
+  // Full form can be entered mid-flow from the short form redirect (?step=2&leadId=xxx)
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialStep = parseInt(urlParams.get('step')) || 1;
+  const initialLeadId = urlParams.get('leadId') || null;
+
+  const [currentStep, setCurrentStep] = useState(initialStep);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [isComplete, setIsComplete] = useState(false);
-  const [leadId, setLeadId] = useState(null);
+  const [leadId, setLeadId] = useState(initialLeadId);
 
   const [formData, setFormData] = useState({
     ...step1Defaults,
@@ -31,8 +37,10 @@ export function useFormStep() {
     ...step3Defaults,
   });
 
-  // ─── Sync URL on step change ────────────────────────────────────────────
+  // ─── Sync URL on step change (full form only) ───────────────────────────
   useEffect(() => {
+    if (variant === 'short') return;
+
     if (isComplete) {
       window.history.pushState({ step: 'complete' }, '', buildStepUrl('complete'));
       return;
@@ -42,10 +50,12 @@ export function useFormStep() {
     // On subsequent steps they've already been captured so we can drop them
     const url = buildStepUrl(currentStep, currentStep === 1);
     window.history.pushState({ step: currentStep }, '', url);
-  }, [currentStep, isComplete]);
+  }, [currentStep, isComplete, variant]);
 
-  // ─── Browser back/forward ───────────────────────────────────────────────
+  // ─── Browser back/forward (full form only) ──────────────────────────────
   useEffect(() => {
+    if (variant === 'short') return;
+
     const handlePopState = (event) => {
       if (event.state?.step && !isComplete) {
         setCurrentStep(event.state.step);
@@ -53,7 +63,7 @@ export function useFormStep() {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [isComplete]);
+  }, [isComplete, variant]);
 
   // ─── Step 1: Create lead, store leadId, advance ─────────────────────────
   const submitStep1 = useCallback(async (stepData) => {
@@ -93,6 +103,12 @@ export function useFormStep() {
       }
 
       setFormData((prev) => ({ ...prev, ...stepData }));
+
+      if (variant === 'short') {
+        window.location.href = `${fullFormUrl}?step=2&leadId=${id}`;
+        return;
+      }
+
       setCurrentStep(2);
     } catch (error) {
       if (error.message === 'Failed to fetch') {
@@ -103,7 +119,7 @@ export function useFormStep() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [leadId]);
+  }, [leadId, variant, fullFormUrl]);
 
   // ─── Steps 2 & 3: Update existing lead, advance ─────────────────────────
   const submitStep = useCallback(async (stepData, step) => {
