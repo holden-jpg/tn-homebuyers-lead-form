@@ -11,6 +11,11 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === 'POST') {
+      // Honeypot check — bots fill this, humans don't
+      if (req.body._hp) {
+        return res.json({ success: true, leadId: 'bot' });
+      }
+
       const ipAddress = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress || '';
       const result = await createSalesforceLead({ ...req.body, ipAddress });
       return res.json({ success: true, leadId: result.id });

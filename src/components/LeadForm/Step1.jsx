@@ -1,8 +1,10 @@
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step1Schema } from '../../schemas/formSchemas';
 
 export function Step1({ defaultValues, onSubmit, isSubmitting }) {
+  const honeypotRef = useRef(null);
   const {
     register,
     handleSubmit,
@@ -10,6 +12,10 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
   } = useForm({
     resolver: zodResolver(step1Schema),
     defaultValues,
+  });
+
+  const handleFormSubmit = handleSubmit((data) => {
+    onSubmit({ ...data, _hp: honeypotRef.current?.value || '' });
   });
 
   // Auto-format phone as user types: 1111111111 → 111-111-1111
@@ -28,7 +34,17 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
         We'll use this to send you your cash offer.
       </p>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleFormSubmit} noValidate>
+        {/* Honeypot — hidden from humans, bots will fill this in */}
+        <div className="hp-field" aria-hidden="true">
+          <input
+            ref={honeypotRef}
+            type="text"
+            name="website"
+            tabIndex="-1"
+            autoComplete="off"
+          />
+        </div>
         {/* Full Name */}
         <div className="form-field">
           <label htmlFor="fullName">Full Name *</label>
