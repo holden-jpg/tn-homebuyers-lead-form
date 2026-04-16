@@ -101,6 +101,15 @@ main {
   }
 }
 
+/* ─── Step Image ─────────────────────────────────────────────────────────── */
+.step-image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 24px;
+}
+
 .form-step-title {
   font-family: var(--font-display);
   font-size: 26px;

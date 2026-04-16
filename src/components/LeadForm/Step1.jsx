@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step1Schema } from '../../schemas/formSchemas';
 import { usePlacesAutocomplete } from '../../hooks/usePlacesAutocomplete';
+import stepImage from '../../assets/step1-image.jpeg';
 
 export function Step1({ defaultValues, onSubmit, isSubmitting }) {
   const honeypotRef = useRef(null);
@@ -31,6 +32,7 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
 
   return (
     <>
+      <img src={stepImage} alt="" className="step-image" />
       <h2 className="form-step-title">Sell your house the easy way!</h2>
 
       <form onSubmit={handleFormSubmit} noValidate>

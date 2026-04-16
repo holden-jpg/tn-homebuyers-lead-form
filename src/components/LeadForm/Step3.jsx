@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step3Schema } from '../../schemas/formSchemas';
+import stepImage from '../../assets/step3-image.jpg';
 
 const TIME_TO_SELL_OPTIONS = [
   { label: 'As soon as possible', value: 'ASAP' },
@@ -21,6 +22,7 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
 
   return (
     <>
+      <img src={stepImage} alt="" className="step-image" />
       <h2 className="form-step-title">Almost done!</h2>
       <p className="form-step-subtitle">
         Just a couple more questions to help us prepare your offer.

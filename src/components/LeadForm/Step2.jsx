@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step2Schema } from '../../schemas/formSchemas';
+import stepImage from '../../assets/step2-image.jpg';
 
 export function Step2({ defaultValues, onSubmit, onBack, isSubmitting }) {
   const {
@@ -27,6 +28,7 @@ export function Step2({ defaultValues, onSubmit, onBack, isSubmitting }) {
 
   return (
     <>
+      <img src={stepImage} alt="" className="step-image" />
       <h2 className="form-step-title">How can we contact you?</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
