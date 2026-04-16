@@ -42,9 +42,12 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
   // ─── Full variant (full-page, no card) ───────────────────────────────────
   if (isComplete) {
     return (
-      <div className="form-wrapper">
-        <Complete />
-      </div>
+      <>
+        <ProgressBar progressPercent={100} />
+        <div className="form-wrapper">
+          <Complete />
+        </div>
+      </>
     );
   }
 

@@ -70,7 +70,7 @@ main {
 /* ─── Progress Strip ────────────────────────────────────────────────────── */
 .progress-strip-track {
   width: 100%;
-  height: 5px;
+  height: 8px;
   background: var(--gray-200);
   flex-shrink: 0;
 }
