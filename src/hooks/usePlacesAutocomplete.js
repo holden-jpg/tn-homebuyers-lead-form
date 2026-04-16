@@ -56,29 +56,37 @@ export function usePlacesAutocomplete(onSelect) {
     if (!apiKey) return;
     loadGoogleMaps(apiKey)
       .then(() => setIsLoaded(true))
-      .catch(() => console.warn('Google Maps failed to load — address autocomplete unavailable'));
+      .catch(() => { /* Maps failed to load — input stays as plain text */ });
   }, []);
 
   useEffect(() => {
     if (!isLoaded || !inputRef.current) return;
 
-    const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
-      componentRestrictions: { country: 'us' },
-      fields: ['formatted_address', 'address_components'],
-      types: ['address'],
-    });
+    try {
+      const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+        componentRestrictions: { country: 'us' },
+        fields: ['formatted_address', 'address_components'],
+        types: ['address'],
+      });
 
-    const listener = autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      if (place.formatted_address) {
-        onSelectRef.current({
-          propertyAddress: place.formatted_address,
-          ...parseAddressComponents(place.address_components || []),
-        });
-      }
-    });
+      const listener = autocomplete.addListener('place_changed', () => {
+        try {
+          const place = autocomplete.getPlace();
+          if (place.formatted_address) {
+            onSelectRef.current({
+              propertyAddress: place.formatted_address,
+              ...parseAddressComponents(place.address_components || []),
+            });
+          }
+        } catch {
+          // Place selection failed — leave input value as-is
+        }
+      });
 
-    return () => window.google.maps.event.removeListener(listener);
+      return () => window.google.maps.event.removeListener(listener);
+    } catch {
+      // Autocomplete init failed — input falls back to plain text
+    }
   }, [isLoaded]);
 
   // Merge react-hook-form ref with our autocomplete ref
