@@ -13,7 +13,12 @@ export function Step2({ defaultValues, onSubmit, onBack, isSubmitting }) {
   });
 
   const formatPhone = (e) => {
-    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
+    let digits = e.target.value.replace(/\D/g, '');
+    // Strip leading country code (1) if autofilled as 11 digits
+    if (digits.length === 11 && digits.startsWith('1')) {
+      digits = digits.slice(1);
+    }
+    digits = digits.slice(0, 10);
     const formatted = digits
       .replace(/(\d{3})(\d{0,3})/, '$1-$2')
       .replace(/(\d{3}-\d{3})(\d{0,4})/, '$1-$2');
