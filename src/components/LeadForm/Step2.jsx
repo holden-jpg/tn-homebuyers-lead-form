@@ -96,6 +96,10 @@ export function Step2({ defaultValues, onSubmit, onBack, isSubmitting }) {
             {isSubmitting ? 'Saving...' : 'Final Step →'}
           </button>
         </div>
+
+        <p className="sms-disclaimer">
+          Message and data rates may apply. By providing my mobile number, I agree to receive text messages at the number provided. Text STOP to 615-299-5520 to opt out at any time. For info text HELP to 615-299-5520. View our <a href="https://299cash.com/privacy-policy/" target="_blank" rel="noopener noreferrer">Privacy Policy</a>
+        </p>
       </form>
     </>
   );
