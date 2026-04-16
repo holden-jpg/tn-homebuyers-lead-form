@@ -4,8 +4,8 @@ import { step3Schema } from '../../schemas/formSchemas';
 
 const TIME_TO_SELL_OPTIONS = [
   { label: 'As soon as possible', value: 'ASAP' },
-  { label: 'Less than 90 days', value: 'Less than 90 days' },
-  { label: 'Less than 6 months', value: 'Less than 6 months' },
+  { label: 'Less than 90 days', value: '90 Days+' },
+  { label: 'Less than 6 months', value: '6 Months+' },
   { label: "I'm not in a rush", value: 'Not in a Rush' },
 ];
 
