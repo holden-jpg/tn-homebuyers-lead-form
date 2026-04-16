@@ -21,7 +21,7 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
     prevStep,
   } = useFormStep({ variant, fullFormUrl });
 
-  // ─── Short variant ───────────────────────────────────────────────────────
+  // ─── Short variant (card style preserved for embedded use) ──────────────
   if (variant === 'short') {
     return (
       <div className="form-wrapper form-wrapper--short">
@@ -39,25 +39,19 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
     );
   }
 
-  // ─── Full variant ────────────────────────────────────────────────────────
+  // ─── Full variant (full-page, no card) ───────────────────────────────────
   if (isComplete) {
     return (
       <div className="form-wrapper">
-        <div className="form-step">
-          <Complete />
-        </div>
+        <Complete />
       </div>
     );
   }
 
   return (
-    <div className="form-wrapper">
-      <div className="form-step">
-        <ProgressBar
-          progressPercent={progressPercent}
-          totalSteps={totalSteps}
-        />
-
+    <>
+      <ProgressBar progressPercent={progressPercent} totalSteps={totalSteps} />
+      <div className="form-wrapper">
         {submitError && (
           <div className="form-error-banner">{submitError}</div>
         )}
@@ -88,6 +82,6 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
           />
         )}
       </div>
-    </div>
+    </>
   );
 }
