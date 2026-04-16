@@ -2,40 +2,39 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step1Schema } from '../../schemas/formSchemas';
+import { usePlacesAutocomplete } from '../../hooks/usePlacesAutocomplete';
 
 export function Step1({ defaultValues, onSubmit, isSubmitting }) {
   const honeypotRef = useRef(null);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(step1Schema),
     defaultValues,
   });
 
-  const handleFormSubmit = handleSubmit((data) => {
-    onSubmit({ ...data, _hp: honeypotRef.current?.value || '' });
+  const addressComponentsRef = useRef({});
+
+  const getMergedRef = usePlacesAutocomplete(({ propertyAddress, ...components }) => {
+    addressComponentsRef.current = components;
+    setValue('propertyAddress', propertyAddress, { shouldValidate: true });
   });
 
-  // Auto-format phone as user types: 1111111111 → 111-111-1111
-  const formatPhone = (e) => {
-    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-    const formatted = digits
-      .replace(/(\d{3})(\d{0,3})/, '$1-$2')
-      .replace(/(\d{3}-\d{3})(\d{0,4})/, '$1-$2');
-    e.target.value = formatted;
-  };
+  const { ref: registerRef, ...addressReg } = register('propertyAddress');
+
+  const handleFormSubmit = handleSubmit((data) => {
+    onSubmit({ ...data, ...addressComponentsRef.current, _hp: honeypotRef.current?.value || '' });
+  });
 
   return (
     <>
-      <h2 className="form-step-title">Let's start with your details</h2>
-      <p className="form-step-subtitle">
-        We'll use this to send you your cash offer.
-      </p>
+      <h2 className="form-step-title">Sell your house the easy way!</h2>
 
       <form onSubmit={handleFormSubmit} noValidate>
-        {/* Honeypot — hidden from humans, bots will fill this in */}
+        {/* Honeypot */}
         <div className="hp-field" aria-hidden="true">
           <input
             ref={honeypotRef}
@@ -45,52 +44,20 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
             autoComplete="off"
           />
         </div>
-        {/* Full Name */}
+
         <div className="form-field">
-          <label htmlFor="fullName">Full Name *</label>
+          <label htmlFor="propertyAddress">Property Address *</label>
           <input
-            id="fullName"
+            id="propertyAddress"
             type="text"
-            autoComplete="name"
-            placeholder="John Smith"
-            {...register('fullName')}
-            className={errors.fullName ? 'input-error' : ''}
+            placeholder="123 Main St, Nashville, TN"
+            autoComplete="off"
+            ref={getMergedRef(registerRef)}
+            {...addressReg}
+            className={errors.propertyAddress ? 'input-error' : ''}
           />
-          {errors.fullName && (
-            <span className="field-error">{errors.fullName.message}</span>
-          )}
-        </div>
-
-        {/* Email */}
-        <div className="form-field">
-          <label htmlFor="email">Email Address</label>
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            placeholder="john@example.com"
-            {...register('email')}
-            className={errors.email ? 'input-error' : ''}
-          />
-          {errors.email && (
-            <span className="field-error">{errors.email.message}</span>
-          )}
-        </div>
-
-        {/* Phone */}
-        <div className="form-field">
-          <label htmlFor="phone">Phone Number *</label>
-          <input
-            id="phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="615-555-1234"
-            {...register('phone')}
-            onInput={formatPhone}
-            className={errors.phone ? 'input-error' : ''}
-          />
-          {errors.phone && (
-            <span className="field-error">{errors.phone.message}</span>
+          {errors.propertyAddress && (
+            <span className="field-error">{errors.propertyAddress.message}</span>
           )}
         </div>
 
@@ -99,7 +66,7 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
           className="btn-primary"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving...' : 'Next Step →'}
+          {isSubmitting ? 'Saving...' : 'Get Started'}
         </button>
       </form>
     </>

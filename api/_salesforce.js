@@ -41,20 +41,15 @@ export async function getSalesforceToken() {
 function mapToSalesforceFields(formData, step) {
   const fields = {};
 
+  // Step 1 = lead create: address only, LastName placeholder = property address
   if (step === 1 || step === 'all') {
-    const fullNameArray = formData.fullName.split(' ');
-
-    console.log('UTM_Source__c: ', formData.utmSource);
-    console.log('UTM_Medium__c: ', formData.utmMedium);
-    console.log('UTM_Campaign__c: ', formData.utmCampaign);
-    console.log('UTM_Term__c: ', formData.utmTerm);
-    console.log('UTM_Content__c: ', formData.utmContent);
-
     Object.assign(fields, {
-      FirstName: (fullNameArray.length > 1 ? fullNameArray[0] : null),
-      LastName: (fullNameArray.length > 1 ? fullNameArray.slice(1).join(' ') : fullNameArray[0]),
-      Email: formData.email,
-      Phone: formData.phone,
+      FirstName: null,
+      LastName: formData.propertyAddress || 'Unknown',
+      Property_Address__Street__s: formData.propertyStreet || formData.propertyAddress || '',
+      Property_Address__City__s: formData.propertyCity || '',
+      Property_Address__StateCode__s: formData.propertyState || '',
+      Property_Address__PostalCode__s: formData.propertyZip || '',
       LeadSource: formData.utmSource || '',
       UTM_Campaign__c: formData.utmCampaign || '',
       UTM_Term__c: formData.utmTerm || '',
@@ -64,21 +59,23 @@ function mapToSalesforceFields(formData, step) {
       GCLID__c: formData.gclid || '',
       FBCLID__c: formData.fbclid || '',
       Lead_Source_URL__c: formData.sourceUrl || '',
-      IP_Address__c: formData.ipAddress || ''
+      IP_Address__c: formData.ipAddress || '',
     });
   }
 
-  if (step === 2 || step === 'all') {
-    const streetAddress = (!!formData.addressLine1 ? (!!formData.addressLine2 ? formData.addressLine1 + '\n' + formData.addressLine2 : formData.addressLine1) : '');
+  // Step 2 = contact update: replace placeholder LastName with real name
+  if (step === 2) {
+    const fullNameArray = (formData.fullName || '').split(' ');
 
     Object.assign(fields, {
-      Property_Address__Street__s: streetAddress,
-      Property_Address__City__s: formData.city,
-      Property_Address__StateCode__s: formData.state,
-      Property_Address__PostalCode__s: formData.zipCode,
+      FirstName: fullNameArray.length > 1 ? fullNameArray[0] : null,
+      LastName: fullNameArray.length > 1 ? fullNameArray.slice(1).join(' ') : fullNameArray[0],
+      Email: formData.email,
+      Phone: formData.phone,
     });
   }
 
+  // Step 3 = timeline update
   if (step === 3 || step === 'all') {
     Object.assign(fields, {
       Desired_Closing_Time_Frame__c: formData.timeToSell,

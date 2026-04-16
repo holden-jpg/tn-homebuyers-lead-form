@@ -20,16 +20,10 @@ const API_URL = import.meta.env.VITE_API_URL || '';
 export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   const utmParams = useUtmParams();
 
-  // Full form can be entered mid-flow from the short form redirect (?step=2&leadId=xxx)
+  // Full form can be entered mid-flow from the short form redirect (?step=2)
   const urlParams = new URLSearchParams(window.location.search);
   const initialStep = parseInt(urlParams.get('step')) || 1;
   const initialLeadId = urlParams.get('leadId') || null;
-
-  const [currentStep, setCurrentStep] = useState(initialStep);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(null);
-  const [isComplete, setIsComplete] = useState(false);
-  const [leadId, setLeadId] = useState(initialLeadId);
 
   const storedStep1 = (() => {
     try {
@@ -39,6 +33,12 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
       return {};
     }
   })();
+
+  const [currentStep, setCurrentStep] = useState(initialStep);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
+  const [isComplete, setIsComplete] = useState(false);
+  const [leadId, setLeadId] = useState(initialLeadId);
 
   const [formData, setFormData] = useState({
     ...step1Defaults,
@@ -56,8 +56,6 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
       return;
     }
 
-    // On step 1, preserve any existing query params (UTMs etc.) alongside step
-    // On subsequent steps they've already been captured so we can drop them
     const url = buildStepUrl(currentStep, currentStep === 1);
     window.history.pushState({ step: currentStep }, '', url);
   }, [currentStep, isComplete, variant]);
@@ -75,7 +73,7 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [isComplete, variant]);
 
-  // ─── Step 1: Create lead, store leadId, advance ─────────────────────────
+  // ─── Step 1: Create lead with address (LastName placeholder) ───────────
   const submitStep1 = useCallback(async (stepData) => {
     setIsSubmitting(true);
     setSubmitError(null);
@@ -83,20 +81,7 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
     try {
       let id = leadId;
 
-      if (leadId) {
-        // Lead already exists — just update it
-        const response = await fetch(`${API_URL}/api/leads/${leadId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...stepData, step: 1 }),
-        });
-
-        const data = await response.json();
-        if (!response.ok || !data.success) {
-          throw new Error(data.error || 'Failed to save, please try again.');
-        }
-      } else {
-        // No lead yet — create it
+      if (!leadId) {
         const response = await fetch(`${API_URL}/api/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -110,6 +95,18 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
 
         id = data.leadId;
         setLeadId(id);
+      } else {
+        // User went back and changed address — update existing lead
+        const response = await fetch(`${API_URL}/api/leads/${leadId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...stepData, step: 1 }),
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'Failed to save, please try again.');
+        }
       }
 
       setFormData((prev) => ({ ...prev, ...stepData }));
@@ -130,10 +127,10 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
     } finally {
       setIsSubmitting(false);
     }
-  }, [leadId, variant, fullFormUrl]);
+  }, [leadId, utmParams, variant, fullFormUrl]);
 
-  // ─── Steps 2 & 3: Update existing lead, advance ─────────────────────────
-  const submitStep = useCallback(async (stepData, step) => {
+  // ─── Step 2: Update lead with real contact info ──────────────────────────
+  const submitStep2 = useCallback(async (stepData) => {
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -141,22 +138,46 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
       const response = await fetch(`${API_URL}/api/leads/${leadId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...stepData, step }),
+        body: JSON.stringify({ ...stepData, step: 2 }),
       });
 
       const data = await response.json();
-
       if (!response.ok || !data.success) {
         throw new Error(data.error || 'Failed to save, please try again.');
       }
 
       setFormData((prev) => ({ ...prev, ...stepData }));
-
-      if (step === 3) {
-        setIsComplete(true);
+      setCurrentStep(3);
+    } catch (error) {
+      if (error.message === 'Failed to fetch') {
+        setCurrentStep(3);
       } else {
-        setCurrentStep((prev) => prev + 1);
+        setSubmitError(error.message);
       }
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [leadId]);
+
+  // ─── Step 3: Update lead, complete ──────────────────────────────────────
+  const submitStep3 = useCallback(async (stepData) => {
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch(`${API_URL}/api/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...stepData, step: 3 }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Failed to save, please try again.');
+      }
+
+      setFormData((prev) => ({ ...prev, ...stepData }));
+      setIsComplete(true);
     } catch (error) {
       setSubmitError(error.message);
     } finally {
@@ -164,7 +185,7 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
     }
   }, [leadId]);
 
-  // ─── Back navigation — no API call needed ───────────────────────────────
+  // ─── Back navigation ─────────────────────────────────────────────────────
   const prevStep = useCallback(() => {
     setSubmitError(null);
     setCurrentStep((prev) => Math.max(prev - 1, 1));
@@ -178,11 +199,11 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
     isSubmitting,
     submitError,
     isComplete,
-    leadId,
     progressPercent,
     totalSteps: TOTAL_STEPS,
     submitStep1,
-    submitStep,
+    submitStep2,
+    submitStep3,
     prevStep,
   };
 }

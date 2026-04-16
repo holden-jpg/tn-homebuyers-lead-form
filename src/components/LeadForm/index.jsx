@@ -16,7 +16,8 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
     progressPercent,
     totalSteps,
     submitStep1,
-    submitStep,
+    submitStep2,
+    submitStep3,
     prevStep,
   } = useFormStep({ variant, fullFormUrl });
 
@@ -40,16 +41,21 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
 
   // ─── Full variant ────────────────────────────────────────────────────────
   if (isComplete) {
-    return <Complete />;
+    return (
+      <div className="form-wrapper">
+        <div className="form-step">
+          <Complete />
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="form-wrapper">
       <div className="form-step">
         <ProgressBar
-          currentStep={currentStep}
-          totalSteps={totalSteps}
           progressPercent={progressPercent}
+          totalSteps={totalSteps}
         />
 
         {submitError && (
@@ -67,7 +73,7 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
         {currentStep === 2 && (
           <Step2
             defaultValues={formData}
-            onSubmit={(data) => submitStep(data, 2)}
+            onSubmit={submitStep2}
             onBack={prevStep}
             isSubmitting={isSubmitting}
           />
@@ -76,7 +82,7 @@ export function LeadForm({ variant = 'full', fullFormUrl = '' }) {
         {currentStep === 3 && (
           <Step3
             defaultValues={formData}
-            onSubmit={(data) => submitStep(data, 3)}
+            onSubmit={submitStep3}
             onBack={prevStep}
             isSubmitting={isSubmitting}
           />

@@ -3,13 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { step3Schema } from '../../schemas/formSchemas';
 
 const TIME_TO_SELL_OPTIONS = [
-  { label: 'As Soon As Possible', value: 'ASAP' },
-  { label: 'Within 2 Weeks', value: '2 Weeks' },
-  { label: 'Within 1 Month', value: '30 Days' },
-  { label: 'Within 2 Months', value: '60 Days' },
-  { label: 'Within 6 Months', value: '90 Days+' },
-  { label: 'Within a Year', value: '6 Months+' },
-  { label: 'Just Exploring', value: 'Not in a Rush' },
+  { label: 'As soon as possible', value: 'ASAP' },
+  { label: 'Less than 90 days', value: 'Less than 90 days' },
+  { label: 'Less than 6 months', value: 'Less than 6 months' },
+  { label: "I'm not in a rush", value: 'Not in a Rush' },
 ];
 
 export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
@@ -83,7 +80,7 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
             className="btn-primary"
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Submitting...' : 'Get My Cash Offer →'}
+            {isSubmitting ? 'Submitting...' : 'Get My Cash Offer'}
           </button>
         </div>
       </form>

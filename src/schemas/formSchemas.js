@@ -1,8 +1,16 @@
 import { z } from 'zod';
 
-// ─── Step 1: Personal Details ───────────────────────────────────────────────
+// ─── Step 1: Property Address ────────────────────────────────────────────────
 
 export const step1Schema = z.object({
+  propertyAddress: z
+    .string()
+    .min(1, 'Property address is required'),
+});
+
+// ─── Step 2: Contact Info ────────────────────────────────────────────────────
+
+export const step2Schema = z.object({
   fullName: z
     .string()
     .min(1, 'Full name is required')
@@ -19,25 +27,7 @@ export const step1Schema = z.object({
   phone: z
     .string()
     .min(1, 'Phone number is required')
-    .regex(/^\d{3}-\d{3}-\d{4}$/, 'Please use format: 111-111-1111')
-});
-
-// ─── Step 2: Property Address ───────────────
-
-export const step2Schema = z.object({
-  addressLine1: z.string().min(1, 'Address Line 1 is required'),
-
-  addressLine2: z.string().optional(),
-
-  city: z.string().optional(),
-
-  state: z.string().optional(),
-  
-  zipCode: z
-    .string()
-    .regex(/^\d{5}(-\d{4})?$/, 'Please enter a valid zip code')
-    .optional()
-    .or(z.literal(''))
+    .regex(/^\d{3}-\d{3}-\d{4}$/, 'Please use format: 111-111-1111'),
 });
 
 // ─── Step 3: Sale Intent ─────────────────────────────────────────────────────
@@ -47,47 +37,37 @@ export const step3Schema = z.object({
     .string()
     .min(1, 'Please select a timeframe'),
 
-  howDidYouHear: z
-    .string()
-    .optional(),
-
   additionalNotes: z
     .string()
     .max(500, 'Please keep notes under 500 characters')
-    .optional()
+    .optional(),
 });
 
-// ─── Combined schema for final Salesforce submission ────────────────────────
-// Merges all steps — used to validate the full payload before the API call
+// ─── Combined schema ─────────────────────────────────────────────────────────
 
 export const fullFormSchema = step1Schema
   .merge(step2Schema)
   .merge(step3Schema);
 
-// ─── TypeScript-style type exports (useful if you migrate to TS later) ───────
+// ─── Defaults ────────────────────────────────────────────────────────────────
 
 export const step1Defaults = {
-  fullName: '',
-  email: '',
-  phone: ''
+  propertyAddress: '',
 };
 
 export const step2Defaults = {
-  addressLine1: '',
-  addressLine2: '',
-  city: '',
-  state: '',
-  zipCode: ''
+  fullName: '',
+  email: '',
+  phone: '',
 };
 
 export const step3Defaults = {
   timeToSell: '',
-  howDidYouHear: '',
-  additionalNotes: ''
+  additionalNotes: '',
 };
 
 export const fullFormDefaults = {
   ...step1Defaults,
   ...step2Defaults,
-  ...step3Defaults
+  ...step3Defaults,
 };

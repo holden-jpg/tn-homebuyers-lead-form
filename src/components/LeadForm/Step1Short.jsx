@@ -2,71 +2,60 @@ import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { step1Schema } from '../../schemas/formSchemas';
+import { usePlacesAutocomplete } from '../../hooks/usePlacesAutocomplete';
 
 export function Step1Short({ defaultValues, onSubmit, isSubmitting }) {
   const honeypotRef = useRef(null);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(step1Schema),
     defaultValues,
   });
 
-  const handleFormSubmit = handleSubmit((data) => {
-    onSubmit({ ...data, _hp: honeypotRef.current?.value || '' });
+  const addressComponentsRef = useRef({});
+
+  const getMergedRef = usePlacesAutocomplete(({ propertyAddress, ...components }) => {
+    addressComponentsRef.current = components;
+    setValue('propertyAddress', propertyAddress, { shouldValidate: true });
   });
 
-  const formatPhone = (e) => {
-    const digits = e.target.value.replace(/\D/g, '').slice(0, 10);
-    const formatted = digits
-      .replace(/(\d{3})(\d{0,3})/, '$1-$2')
-      .replace(/(\d{3}-\d{3})(\d{0,4})/, '$1-$2');
-    e.target.value = formatted;
-  };
+  const { ref: registerRef, ...addressReg } = register('propertyAddress');
+
+  const handleFormSubmit = handleSubmit((data) => {
+    onSubmit({ ...data, ...addressComponentsRef.current, _hp: honeypotRef.current?.value || '' });
+  });
 
   return (
     <form className="short-form" onSubmit={handleFormSubmit} noValidate>
-        {/* Honeypot — hidden from humans, bots will fill this in */}
-        <div className="hp-field" aria-hidden="true">
-          <input
-            ref={honeypotRef}
-            type="text"
-            name="website"
-            tabIndex="-1"
-            autoComplete="off"
-          />
-        </div>
+      {/* Honeypot */}
+      <div className="hp-field" aria-hidden="true">
+        <input
+          ref={honeypotRef}
+          type="text"
+          name="website"
+          tabIndex="-1"
+          autoComplete="off"
+        />
+      </div>
+
       <div className="short-form-fields">
         <div className="form-field">
-          <label htmlFor="sf-fullName">Full Name *</label>
+          <label htmlFor="sf-propertyAddress">Property Address *</label>
           <input
-            id="sf-fullName"
+            id="sf-propertyAddress"
             type="text"
-            autoComplete="name"
-            placeholder="John Smith"
-            {...register('fullName')}
-            className={errors.fullName ? 'input-error' : ''}
+            placeholder="123 Main St, Nashville, TN"
+            autoComplete="off"
+            ref={getMergedRef(registerRef)}
+            {...addressReg}
+            className={errors.propertyAddress ? 'input-error' : ''}
           />
-          {errors.fullName && (
-            <span className="field-error">{errors.fullName.message}</span>
-          )}
-        </div>
-
-        <div className="form-field">
-          <label htmlFor="sf-phone">Phone Number *</label>
-          <input
-            id="sf-phone"
-            type="tel"
-            autoComplete="tel"
-            placeholder="615-555-1234"
-            {...register('phone')}
-            onInput={formatPhone}
-            className={errors.phone ? 'input-error' : ''}
-          />
-          {errors.phone && (
-            <span className="field-error">{errors.phone.message}</span>
+          {errors.propertyAddress && (
+            <span className="field-error">{errors.propertyAddress.message}</span>
           )}
         </div>
 
@@ -75,7 +64,7 @@ export function Step1Short({ defaultValues, onSubmit, isSubmitting }) {
           className="btn-primary short-form-btn"
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Saving...' : 'Get My Cash Offer →'}
+          {isSubmitting ? 'Saving...' : 'Get Started'}
         </button>
       </div>
     </form>
