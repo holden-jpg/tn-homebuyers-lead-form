@@ -62,6 +62,12 @@ export function usePlacesAutocomplete(onSelect) {
   useEffect(() => {
     if (!isLoaded || !inputRef.current) return;
 
+    // Prevent Enter key from submitting the form while the dropdown is open
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') e.preventDefault();
+    };
+    inputRef.current.addEventListener('keydown', handleKeyDown);
+
     try {
       const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
         componentRestrictions: { country: 'us' },
@@ -83,9 +89,13 @@ export function usePlacesAutocomplete(onSelect) {
         }
       });
 
-      return () => window.google.maps.event.removeListener(listener);
+      return () => {
+        window.google.maps.event.removeListener(listener);
+        inputRef.current?.removeEventListener('keydown', handleKeyDown);
+      };
     } catch {
       // Autocomplete init failed — input falls back to plain text
+      inputRef.current?.removeEventListener('keydown', handleKeyDown);
     }
   }, [isLoaded]);
 
