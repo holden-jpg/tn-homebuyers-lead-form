@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: 'https://tn-homebuyers-lead-form.vercel.app/',
   build: {
     rollupOptions: {
       output: {
