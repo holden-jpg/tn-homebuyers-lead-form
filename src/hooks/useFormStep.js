@@ -15,7 +15,7 @@ function buildStepUrl(step, preserveExisting = false) {
 }
 
 const TOTAL_STEPS = 3;
-const API_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = import.meta.env.VITE_API_URL || 'https://tn-homebuyers-lead-form.vercel.app';
 
 export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   const utmParams = useUtmParams();
