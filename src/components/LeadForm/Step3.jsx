@@ -22,7 +22,7 @@ export function Step3({ defaultValues, onSubmit, onBack, isSubmitting }) {
 
   return (
     <>
-      <img src={stepImage} alt="" className="step-image" />
+      <img src={stepImage} alt="" className="step-image-65" />
       <h2 className="form-step-title">Almost done!</h2>
       <p className="form-step-subtitle">
         Just a couple more questions to help us prepare your offer.
