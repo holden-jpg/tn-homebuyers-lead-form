@@ -505,7 +505,7 @@ main {
 /* ─── Short Form ─────────────────────────────────────────────────────────── */
 .form-wrapper--short {
   max-width: 900px;
-  padding: 5px 10px;
+  padding: 0px;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -528,7 +528,7 @@ main {
 
 .form-wrapper--short .field-error {
   position: static;
-  margin-top: 4px;
+  margin-top: 0px;
 }
 
 .form-wrapper--short .short-form-fields {
