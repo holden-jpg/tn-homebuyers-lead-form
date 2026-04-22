@@ -505,15 +505,25 @@ main {
 /* ─── Short Form ─────────────────────────────────────────────────────────── */
 .form-wrapper--short {
   max-width: 900px;
+  padding: 5px 10px;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .form-wrapper--short .form-step {
-  padding: 20px 24px 3px;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-radius: 0;
+  padding: 0;
 }
 
 .form-wrapper--short .form-field {
   margin-bottom: 0;
   position: relative;
+}
+
+.form-wrapper--short .form-field label {
+  color: var(--white);
 }
 
 .form-wrapper--short .field-error {
@@ -524,32 +534,17 @@ main {
 }
 
 .form-wrapper--short .short-form-fields {
-  padding-bottom: 20px;
-}
-
-.short-form-fields {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  display: flex !important;
+  flex-direction: column !important;
   gap: 12px;
-  align-items: end;
 }
 
 .short-form-btn {
-  width: auto;
+  width: 100%;
   white-space: nowrap;
   margin-top: 0;
-  margin-bottom: 2px;
-}
-
-@media (max-width: 700px) {
-  .short-form-fields {
-    grid-template-columns: 1fr;
-  }
-
-  .short-form-btn {
-    width: 100%;
-    margin-top: 4px;
-  }
+  padding: 7px 24px;
+  font-size: 13px;
 }
 
 /* ─── Mobile ─────────────────────────────────────────────────────────────── */
