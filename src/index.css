@@ -537,6 +537,7 @@ main {
   display: flex !important;
   flex-direction: column !important;
   gap: 12px;
+  padding: 0px 10px 20px;
 }
 
 .short-form-btn {
