@@ -510,7 +510,7 @@ main {
 
 .form-wrapper--short .form-step {
   background: transparent;
-  box-shadow: none;
+  box-shadow: none !important;
   border-radius: 0;
   padding: 0;
 }
@@ -532,8 +532,8 @@ main {
 }
 
 .short-form-fields {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
   gap: 12px;
 }
 
@@ -541,18 +541,8 @@ main {
   width: 100%;
   white-space: nowrap;
   margin-top: 0;
-  padding: 10px 24px;
-}
-
-@media (max-width: 700px) {
-  .short-form-fields {
-    grid-template-columns: 1fr;
-  }
-
-  .short-form-btn {
-    width: 100%;
-    margin-top: 4px;
-  }
+  padding: 7px 24px;
+  font-size: 13px;
 }
 
 /* ─── Mobile ─────────────────────────────────────────────────────────────── */
