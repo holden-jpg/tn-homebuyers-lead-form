@@ -527,9 +527,7 @@ main {
 }
 
 .form-wrapper--short .field-error {
-  position: absolute;
-  top: 100%;
-  left: 0;
+  position: static;
   margin-top: 4px;
 }
 
