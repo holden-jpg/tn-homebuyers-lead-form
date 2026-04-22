@@ -161,7 +161,7 @@ main {
 .form-field select,
 .form-field textarea {
   width: 100%;
-  padding: 7.5px 16px;
+  padding: 7px 16px;
   font-family: var(--font-body);
   font-size: 15px;
   color: var(--gray-900);
