@@ -44,7 +44,6 @@ export function Step1Short({ defaultValues, onSubmit, isSubmitting }) {
 
       <div className="short-form-fields">
         <div className="form-field">
-          <label htmlFor="sf-propertyAddress">Property Address *</label>
           <input
             id="sf-propertyAddress"
             type="text"
