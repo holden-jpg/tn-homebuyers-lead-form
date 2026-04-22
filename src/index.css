@@ -101,21 +101,21 @@ main {
 }
 
 /* ─── Step Image ─────────────────────────────────────────────────────────── */
-#thb-form .step-image-70 {
+[data-thb-form] .step-image-70 {
   display: block;
   width: 70%;
   margin: 0 auto 24px;
   border-radius: var(--radius-md);
 }
 
-#thb-form .step-image-65 {
+[data-thb-form] .step-image-65 {
   display: block;
   width: 65%;
   margin: 0 auto 24px;
   border-radius: var(--radius-md);
 }
 
-#thb-form .step-image-50 {
+[data-thb-form] .step-image-50 {
   display: block;
   width: 50%;
   margin: 0 auto 24px;
