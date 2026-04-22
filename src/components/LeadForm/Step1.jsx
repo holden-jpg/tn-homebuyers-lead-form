@@ -32,7 +32,7 @@ export function Step1({ defaultValues, onSubmit, isSubmitting }) {
 
   return (
     <>
-      <img src={stepImage} alt="" className="step-image-70" />
+      <img src={stepImage} alt="" style={{ display: 'block', width: '70%', margin: '0 auto 24px', borderRadius: '12px' }} />
       <h2 className="form-step-title">Sell your house the easy way!</h2>
 
       <form onSubmit={handleFormSubmit} noValidate>

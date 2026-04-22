@@ -28,7 +28,7 @@ export function Step2({ defaultValues, onSubmit, onBack, isSubmitting }) {
 
   return (
     <>
-      <img src={stepImage} alt="" className="step-image-50" />
+      <img src={stepImage} alt="" style={{ display: 'block', width: '50%', margin: '0 auto 24px', borderRadius: '12px' }} />
       <h2 className="form-step-title">How can we contact you?</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
