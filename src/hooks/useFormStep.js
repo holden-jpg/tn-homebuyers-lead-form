@@ -51,6 +51,8 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   useEffect(() => {
     if (variant === 'short') return;
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     if (isComplete) {
       window.history.pushState({ step: 'complete' }, '', buildStepUrl('complete'));
       return;
