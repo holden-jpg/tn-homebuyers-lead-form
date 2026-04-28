@@ -1,4 +1,5 @@
 import { createSalesforceLead, updateSalesforceLead } from './_salesforce.js';
+import { sendErrorNotification } from './_email.js';
 
 export default async function handler(req, res) {
   // CORS headers
@@ -32,6 +33,11 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (error) {
     console.error(error.message);
+
+    const step = req.method === 'POST' ? 1 : (req.body?.step || 'unknown');
+    const leadId = req.query?.leadId || null;
+    sendErrorNotification({ error: error.message, step, formData: req.body || {}, leadId }).catch(console.error);
+
     return res.status(500).json({ success: false, error: error.message });
   }
 }
