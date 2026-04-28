@@ -23,7 +23,9 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
   // Full form can be entered mid-flow from the short form redirect (?step=2)
   const urlParams = new URLSearchParams(window.location.search);
   const initialStep = parseInt(urlParams.get('step')) || 1;
-  const initialLeadId = urlParams.get('leadId') || sessionStorage.getItem('thb_lead_id') || null;
+  const initialLeadId = initialStep > 1
+    ? (urlParams.get('leadId') || sessionStorage.getItem('thb_lead_id') || null)
+    : null;
 
   const storedStep1 = (() => {
     try {
