@@ -46,7 +46,7 @@ function mapToSalesforceFields(formData, step) {
     Object.assign(fields, {
       FirstName: null,
       LastName: formData.propertyAddress || 'Unknown',
-      Property_Address__Street__s: formData.propertyStreet || formData.propertyAddress || '',
+      Property_Address__Street__s: (formData.propertyStreet || formData.propertyAddress || '').substring(0, 80),
       Property_Address__City__s: formData.propertyCity || '',
       Property_Address__StateCode__s: formData.propertyState || '',
       Property_Address__PostalCode__s: formData.propertyZip || '',
@@ -57,9 +57,9 @@ function mapToSalesforceFields(formData, step) {
       UTM_Content__c: formData.utmContent || '',
       UTM_Ad_Group__c: formData.utmAdGroup || '',
       Campaign_ID__c: formData.utmId || '',
-      GCLID__c: formData.gclid || '',
-      FBCLID__c: formData.fbclid || '',
-      Lead_Source_URL__c: formData.sourceUrl || '',
+      GCLID__c: (formData.gclid || '').substring(0, 255),
+      FBCLID__c: (formData.fbclid || '').substring(0, 255),
+      Lead_Source_URL__c: (formData.sourceUrl || '').substring(0, 255),
       IP_Address__c: formData.ipAddress || '',
     });
   }
@@ -69,8 +69,8 @@ function mapToSalesforceFields(formData, step) {
     const fullNameArray = (formData.fullName || '').split(' ');
 
     Object.assign(fields, {
-      FirstName: fullNameArray.length > 1 ? fullNameArray[0] : null,
-      LastName: fullNameArray.length > 1 ? fullNameArray.slice(1).join(' ') : fullNameArray[0],
+      FirstName: fullNameArray.length > 1 ? fullNameArray[0].substring(0, 80) : null,
+      LastName: (fullNameArray.length > 1 ? fullNameArray.slice(1).join(' ') : fullNameArray[0]).substring(0, 80),
       Email: formData.email,
       Phone: formData.phone,
     });
