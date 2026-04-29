@@ -56,7 +56,7 @@ function mapToSalesforceFields(formData, step) {
       UTM_Term__c: formData.utmTerm || '',
       UTM_Content__c: formData.utmContent || '',
       UTM_Ad_Group__c: formData.utmAdGroup || '',
-      Campaign_ID__c: formData.utmId || '',
+      Campaign_ID__c: formData.utmCampaignId || '',
       GCLID__c: (formData.gclid || '').substring(0, 255),
       FBCLID__c: (formData.fbclid || '').substring(0, 255),
       Lead_Source_URL__c: (formData.sourceUrl || '').substring(0, 255),

@@ -11,7 +11,7 @@ const CAPTURED_UTMS = (() => {
     utmCampaign: params.get('utm_campaign') || '',
     utmTerm:     params.get('utm_term')     || '',
     utmContent:  params.get('utm_content')  || '',
-    utmId:       params.get('utm_id')       || '',
+    utmCampaignId: params.get('utm_campaign_id') || '',
     utmAdGroup:  params.get('utm_adgroup')  || '',
     gclid:       params.get('gclid')        || '',
     fbclid:      params.get('fbclid')       || '',
