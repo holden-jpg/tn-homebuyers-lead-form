@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useUtmParams } from './useUtmParams';
+import { useUtmParams, getCapturedSourceUrl } from './useUtmParams';
 import {
   step1Defaults,
   step2Defaults,
@@ -89,7 +89,7 @@ export function useFormStep({ variant = 'full', fullFormUrl = '' } = {}) {
         const response = await fetch(`${API_URL}/api/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...stepData, ...utmParams, sourceUrl: window.location.href }),
+          body: JSON.stringify({ ...stepData, ...utmParams, sourceUrl: getCapturedSourceUrl() }),
         });
 
         const data = await response.json();
