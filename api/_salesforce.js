@@ -50,7 +50,7 @@ function mapToSalesforceFields(formData, step) {
       Property_Address__City__s: formData.propertyCity || '',
       Property_Address__StateCode__s: formData.propertyState || '',
       Property_Address__PostalCode__s: formData.propertyZip || '',
-      LeadSource: formData.utmSource || '',
+      LeadSource: formData.utmSource || 'SEO / Google General Search',
       Lead_Form_Source__c: 'Online',
       UTM_Campaign__c: formData.utmCampaign || '',
       UTM_Term__c: formData.utmTerm || '',
